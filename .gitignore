@@ -1,0 +1,12 @@
+*.pyc
+*.class
+*.so
+*.o
+*.c
+*.cpp
+*~
+*.npy
+*.npz
+*.profile
+*.log
+*.dat
