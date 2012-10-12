@@ -21,8 +21,7 @@ class LogisticObjective(object):
             :param X: The dataset stacked as row vectors into a matrix
             :param d: A column vector of class labels (either -1 or 1).
             :param reg: The regulization coefficient. the regulization term is 
-            of the form 0.5*reg*n*||w||^2, where n in the number of 
-            datapoints.
+            of the form 0.5*reg*||w||^2.
         """
         self.X = X
         self.d = d
@@ -50,5 +49,5 @@ class LogisticObjective(object):
          
         g = reg_grad + dot(X.T, -d/(ety + 1.0))
         
-        return (loss, g)
+        return (loss/self.n, g/self.n)
 

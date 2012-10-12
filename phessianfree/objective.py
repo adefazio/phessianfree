@@ -63,11 +63,15 @@ class Objective(object):
             There is an implicit assumption that the last eval of f for
             part p was at location x.
         """
-        (s,e) = self.partRange(p)
-        fdEps = self.props.get("fdEps", 1e-8)
-        scale = self.ndata / float(e-s)
         
         right_grad = self.grads[p, :]
+        (s,e) = self.partRange(p)
+        
+        # fdEps needs to e scaled so its much smaller than the gradient's
+        # entry wise magnitude.
+        fdEps = linalg.norm(right_grad, inf) * self.props.get("fdEps", 1e-8)
+        scale = self.ndata / float(e-s)
+        
         def mv(v):
             _, left_grad = self.evalRange(x + fdEps*v, s, e)
             hvp = (left_grad - right_grad) / fdEps

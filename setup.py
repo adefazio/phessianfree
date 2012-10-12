@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-	name = 'pnewton',
+	name = 'phessianfree',
 	version = '0.1',
 	packages = find_packages(),
     install_requires=['setuptools'],
@@ -9,6 +9,6 @@ setup(
 	author = "Aaron Defazio",
 	author_email = "aaron.defazio@anu.edu.au",
 	licence = "BSD",
-	keywords = "newton lbfgs optimization",
+	keywords = "newton lbfgs optimization hessian hessianfree",
 	url = "",
 )

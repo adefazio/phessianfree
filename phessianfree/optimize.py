@@ -7,7 +7,7 @@ import objective
 from numpy import *
 
 def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
-    logger = logging.getLogger("pnewton")
+    logger = logging.getLogger("phessianfree")
     useSubsetObjective = props.get("subsetObjective", True)
     n = len(x0)
     
@@ -64,6 +64,10 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
         gfk = gfkp1
         
         logger.info("Iteration %d, fval: %1.7f, gnorm %1.3e", k, fval, gnorm) 
+        
+        if callback is not None:
+            callback(xk, fval, gfk, f.pointsProcessed)
+        
         k += 1
 
     return xk, fval

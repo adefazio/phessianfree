@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pnewton’s documentation &mdash; pnewton 0.1 documentation</title>
+    <title>phessianfree’s documentation &mdash; phessianfree 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="pnewton 0.1 documentation" href="#" />
-    <link rel="next" title="Optimization Examples" href="examples.html" /> 
+    <link rel="top" title="phessianfree 0.1 documentation" href="#" />
+    <link rel="next" title="Example documentation" href="examples.html" /> 
   </head>
   <body>
     <div class="related">
@@ -39,9 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples.html" title="Optimization Examples"
+          <a href="examples.html" title="Example documentation"
              accesskey="N">next</a> |</li>
-        <li><a href="#">pnewton 0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">phessianfree 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -50,13 +50,14 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="pnewton-s-documentation">
-<h1>pnewton&#8217;s documentation<a class="headerlink" href="#pnewton-s-documentation" title="Permalink to this headline">¶</a></h1>
-<p>pnewton is a modern optimization method for smooth, unconstained minimization problems, intended to be used in place of LBFGS. It is designed to take advantage of the structure of regularized loss minimization problems, where the objective decomposes as a sum over a large number of terms. By taking advantage of this structure, it is able to achieve rapid initial convergence similar to stochastic gradient descent methods, but without sacrificing the later stage convergence properties of batch methods such as LBFGS.</p>
-<p>See the example code for comparisons between LBFGS, pnewton and SAG on training a standard classifier, where pnewton is able to converge in test loss up to 4 times faster than LBFGS.</p>
+  <div class="section" id="phessianfree-s-documentation">
+<h1>phessianfree&#8217;s documentation<a class="headerlink" href="#phessianfree-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>phessianfree is a modern optimization method for smooth, unconstained minimization problems, intended to be used in place of LBFGS. It is designed to take advantage of the structure of regularized loss minimization problems, where the objective decomposes as a sum over a large number of terms. By taking advantage of this structure, it is able to achieve rapid initial convergence similar to stochastic gradient descent methods, but without sacrificing the later stage convergence properties of batch methods such as LBFGS.</p>
+<p>phessianfree uses a newton-cg method, somestimes called a hessian-free method, where the search direction at each step is improved using a linear solver, to bring it closer to the ideal newton step. Hessian-vector products are evaluated without forming the actual hessian, using finite difference methods, with an adjustable overhead, defaulting to 10% more computation per iteration than standard lbfgs methods.</p>
+<p>See the example code for comparisons between LBFGS, phessianfree and SAG on training a standard classifier, where pnewton is able to converge in test loss up to 4 times faster than LBFGS.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Optimization Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example documentation</a></li>
 </ul>
 </div>
 </div>
@@ -69,7 +70,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Next topic</h4>
   <p class="topless"><a href="examples.html"
-                        title="next chapter">Optimization Examples</a></p>
+                        title="next chapter">Example documentation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -102,9 +103,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples.html" title="Optimization Examples"
+          <a href="examples.html" title="Example documentation"
              >next</a> |</li>
-        <li><a href="#">pnewton 0.1 documentation</a> &raquo;</li> 
+        <li><a href="#">phessianfree 0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
