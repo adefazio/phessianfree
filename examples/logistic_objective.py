@@ -4,20 +4,23 @@ import pickle
 import scipy
 from numpy import *
 
-class LogisticObjective:
+class LogisticObjective(object):
     """
         Logistic regression objective function.
         Can be passed into standard scipy optimization routines,
         as well as pnewton, which takes advantage of the decomposition
         of the objective as a sum of losses over each datapoint.
+        It is not necessary to encapsulate an objective in a class such
+        as is done here, objectives can also be defined as single
+        functions.
     """
     
     
-    def __init__(self, X, d, reg, props):
+    def __init__(self, X, d, reg, props={}):
         """
-            X should be the dataset stacked as row vectors into a matrix,
-            with d a column vector of class labels (either -1 or 1).
-            reg is the regulization coefficient. the regulization term is 
+            :param X: The dataset stacked as row vectors into a matrix
+            :param d: A column vector of class labels (either -1 or 1).
+            :param reg: The regulization coefficient. the regulization term is 
             of the form 0.5*reg*n*||w||^2, where n in the number of 
             datapoints.
         """
@@ -28,7 +31,9 @@ class LogisticObjective:
         self.m = X.shape[1] # dimension
         self.props = props
     
-    def __call__(self, w, s=0, e=self.n):
+    def __call__(self, w, s=0, e=None):
+        if e is None:
+            e = self.n
         X = self.X[s:e, :]
         d = self.d[s:e]
         
