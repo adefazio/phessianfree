@@ -1,11 +1,6 @@
 import logging
 import logging.config
-import datetime
 from numpy import *
-import scipy
-import scipy.io
-import matplotlib
-import matplotlib.pyplot as plt
 from util.util import read_mnist, permute_data
 from logistic_objective import LogisticObjective
 import phessianfree
