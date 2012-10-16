@@ -11,7 +11,8 @@ setup(
 	],
 	author = "Aaron Defazio",
 	author_email = "aaron.defazio@anu.edu.au",
-	licence = "BSD",
+	license = "BSD",
 	keywords = "newton lbfgs optimization hessian hessianfree",
-	url = "",
+	url = "https://github.com/adefazio/phessianfree",
+	long_description = "Hessian free optimization in python for smooth unconstrained problems"
 )

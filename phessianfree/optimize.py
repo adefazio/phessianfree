@@ -1,3 +1,11 @@
+"""
+.. module:: optimize
+    :platform: Unix, Windows
+    :synopsis: Hessian free optimization in python for smooth unconstrained problems
+
+
+.. moduleauthor:: Aaron Defazio <aaron.defazio@anu.edu.au>
+"""
 
 import logging
 import numpy
@@ -7,6 +15,40 @@ import objective
 from numpy import *
 
 def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
+    """
+    This method can be invoked in a simlar way as lbfgs routines in Scipy,
+    with the following differences:
+        - f takes additional arguments 's' and 'e' that signify a range of 
+          points to evaluate the objective over.
+        - The callback gives additional information
+        - logging is performed using the standard python logging framework
+    
+    :param function f:
+        Objective function, taking arguments (x,s,e), where
+        (s,e) is the range of datapoints over which to evaluate
+        the objective.
+    :param vector x0:
+        Initial point
+    :param int ndata: 
+        Number of points in dataset. The passed function 
+        will be invoked with s,e between 0 and ndata.
+    
+    :keyword float gtol:
+        stopping criterion, measured in 2-norm.
+    :keyword int maxiter: 
+        Maximum number of steps to complete. Note that this does
+        not count line search iterations.
+    :keyword function callback:
+        Invoked with (xk, fval, gfk, pointsProcessed), 
+        useful for tracking progress for latter plotting. 
+        PlottingCallback in the convergence module can do
+        this for you.
+    :keyword object props:
+        Map of additional parameters.
+        
+    :rtype: (xk, fval)
+       
+    """
     logger = logging.getLogger("phessianfree")
     useSubsetObjective = props.get("subsetObjective", True)
     n = len(x0)

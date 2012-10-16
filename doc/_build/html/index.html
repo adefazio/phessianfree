@@ -55,6 +55,48 @@
 <p>phessianfree is a modern optimization method for smooth, unconstained minimization problems, intended to be used in place of LBFGS. It is designed to take advantage of the structure of regularized loss minimization problems, where the objective decomposes as a sum over a large number of terms. By taking advantage of this structure, it is able to achieve rapid initial convergence similar to stochastic gradient descent methods, but without sacrificing the later stage convergence properties of batch methods such as LBFGS.</p>
 <p>phessianfree uses a newton-cg method, somestimes called a hessian-free method, where the search direction at each step is improved using a linear solver, to bring it closer to the ideal newton step. Hessian-vector products are evaluated without forming the actual hessian, using finite difference methods, with an adjustable overhead, defaulting to 10% more computation per iteration than standard lbfgs methods.</p>
 <p>See the example code for comparisons between LBFGS, phessianfree and SAG on training a standard classifier, where pnewton is able to converge in test loss up to 4 times faster than LBFGS.</p>
+<dl class="function">
+<dt id="phessianfree.optimize">
+<tt class="descclassname">phessianfree.</tt><tt class="descname">optimize</tt><big>(</big><em>f</em>, <em>x0</em>, <em>ndata</em>, <em>gtol=1e-05</em>, <em>maxiter=100</em>, <em>callback=None</em>, <em>props={}</em><big>)</big><a class="headerlink" href="#phessianfree.optimize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method can be invoked in a simlar way as lbfgs routines in Scipy,
+with the following differences:</p>
+<blockquote>
+<div><ul class="simple">
+<li>f takes additional arguments &#8216;s&#8217; and &#8216;e&#8217; that signify a range of 
+points to evaluate the objective over.</li>
+<li>The callback gives additional information</li>
+<li>logging is performed using the standard python logging framework</li>
+</ul>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>f</strong> (<em>function</em>) &#8211; Objective function, taking arguments (x,s,e), where
+(s,e) is the range of datapoints over which to evaluate
+the objective.</li>
+<li><strong>x0</strong> (<em>vector</em>) &#8211; Initial point</li>
+<li><strong>ndata</strong> (<em>int</em>) &#8211; Number of points in dataset. The passed function 
+will be invoked with s,e between 0 and ndata.</li>
+<li><strong>gtol</strong> (<em>float</em>) &#8211; stopping criterion, measured in 2-norm.</li>
+<li><strong>maxiter</strong> (<em>int</em>) &#8211; Maximum number of steps to complete. Note that this does
+not count line search iterations.</li>
+<li><strong>callback</strong> (<em>function</em>) &#8211; Invoked with (xk, fval, gfk, pointsProcessed), 
+useful for tracking progress for latter plotting. 
+PlottingCallback in the convergence module can do
+this for you.</li>
+<li><strong>props</strong> (<em>object</em>) &#8211; Map of additional parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(xk, fval)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Example documentation</a></li>

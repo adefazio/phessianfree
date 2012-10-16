@@ -1,7 +1,3 @@
-.. Documentation master file, created by
-   sphinx-quickstart on Thu Oct 11 13:08:50 2012.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
 phessianfree's documentation
 ===================================
@@ -11,6 +7,8 @@ phessianfree is a modern optimization method for smooth, unconstained minimizati
 phessianfree uses a newton-cg method, somestimes called a hessian-free method, where the search direction at each step is improved using a linear solver, to bring it closer to the ideal newton step. Hessian-vector products are evaluated without forming the actual hessian, using finite difference methods, with an adjustable overhead, defaulting to 10% more computation per iteration than standard lbfgs methods.
 
 See the example code for comparisons between LBFGS, phessianfree and SAG on training a standard classifier, where pnewton is able to converge in test loss up to 4 times faster than LBFGS.
+
+.. autofunction:: phessianfree.optimize
 
 .. toctree::
    :maxdepth: 2

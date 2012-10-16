@@ -72,10 +72,15 @@ class Objective(object):
         fdEps = linalg.norm(right_grad, inf) * self.props.get("fdEps", 1e-8)
         scale = self.ndata / float(e-s)
         
-        def mv(v):
-            _, left_grad = self.evalRange(x + fdEps*v, s, e)
-            hvp = (left_grad - right_grad) / fdEps
-            return scale*hvp
+        # Use GaussNewton if implemented by them
+        if hasattr(self.f, 'gaussNewtonProd'):
+            def mv(v):
+                return scale*self.f.gaussNewtonProd(x, v, s, e)
+        else:
+            def mv(v):
+                _, left_grad = self.evalRange(x + fdEps*v, s, e)
+                hvp = (left_grad - right_grad) / fdEps
+                return scale*hvp
             
         return mv
         
