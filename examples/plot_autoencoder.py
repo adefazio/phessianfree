@@ -21,7 +21,7 @@ ndata = X.shape[0]
 X, d = permute_data(X,d) # Randomize order
 
 # The number of hidden units is low here just so it finishes in a reasonable amount of time.
-f = AutoencoderObjective(X, reg=0.01, n_hidden=n_hidden)
+f = AutoencoderObjective(X, reg=0.0001, n_hidden=n_hidden)
 m = f.n_total_weights
 
 # Initialization is quite cruical for autoencoders
@@ -30,17 +30,13 @@ rng = random.RandomState(123)
 
 # Initialize the parameters to random values, offsets to zero
 initial_W = asarray(rng.uniform(
-          low = -1.0 * sqrt(3.0 / (f.n_hidden + f.n_visible)),
-          high = 1.0 * sqrt(3.0 / (f.n_hidden + f.n_visible)),
+          low = -4.0 * sqrt(6.0 / (f.n_hidden + f.n_visible)),
+          high = 4.0 * sqrt(6.0 / (f.n_hidden + f.n_visible)),
           size=(f.n_visible, f.n_hidden)))
 bhid = zeros(f.n_hidden)
 bvis = zeros(f.n_visible)
 
 x0 = concatenate((bhid, bvis, initial_W.flatten()))
-
-##############################
-#Run a few iterations of lbfgs so that all methods converge to the same local-minimum
-x0, _, _ = scipy.optimize.fmin_l_bfgs_b(f, x0, m=3, maxfun=6)
 
 ##############################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
@@ -53,10 +49,10 @@ phf_cb = convergence.PlottingCallback("phessianfree mb-lbfgs", ndata)
 
 props = {
     'subsetVariant': 'lbfgs',
-    'parts': 1000,
-    'innerSolveAverage': True, # Should be used when parts is large
+    'parts': 100,
+    'innerSolveAverage': False, # Should be used when parts is large
     'solveFraction': 0.2,
-    'gradRelErrorBound': 0.2
+    'gradRelErrorBound': 0.1
 }
 
 logger.info("Running phessianfree with inner lbfgs linear solver")
@@ -66,9 +62,9 @@ x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb,
 # Run with inner cg method as well
 props = { 
     'subsetVariant': 'cg',
-    'parts': 100,   # inner cg can not handle as many parts as inner lbfgs
+    'parts': 100,
     'solveFraction': 0.2,
-    'gradRelErrorBound': 0.2
+    'subsetObjective': False
 }
 
 phf_cb_cg = convergence.PlottingCallback("phessianfree cg", ndata)
