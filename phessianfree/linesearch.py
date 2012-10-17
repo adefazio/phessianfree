@@ -3,10 +3,10 @@ import logging
 from numpy import *
 
 def weak_wolfe(f, xk, upper_val, grad, pk, props):
-    logger = logging.getLogger("ls")
+    logger = logging.getLogger("phf.ls")
     maxIter = props.get("maxLineSearchIter", 8)
     t = props.get("initialLineSearcht", 1.0)
-    interpMethod = props.get("lsInterpMethod", 'cubic') #'taylor') #'bisect')
+    interpMethod = props.get("lsInterpMethod", 'cubic')
     experimental_ls = False
     c1 = 1e-4 #1e-4
     c2 = 0.9 #0.9

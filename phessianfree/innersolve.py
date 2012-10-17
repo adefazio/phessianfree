@@ -25,7 +25,7 @@ def solve(f, xk, gfk, k, vecs, props):
     
     
 def cg(f, xk, gfk, k, vecs, props):
-    logger = logging.getLogger("innersolve")
+    logger = logging.getLogger("phf.innersolve")
     solve_fraction = props.get("solveFraction", 0.2)
     n = len(xk)
     x0 = lbfgs_step(gfk, k, vecs, props)
@@ -44,7 +44,7 @@ def cg(f, xk, gfk, k, vecs, props):
     return pk
     
 def lbfgs(f, xk, gfk, k, vecs, props):
-    logger = logging.getLogger("innersolve")
+    logger = logging.getLogger("phf.innersolve")
     solve_fraction = props.get("solveFraction", 0.2)
     stepFactor = props.get("innerSolveStepFactor", 0.5)
     n = len(xk)

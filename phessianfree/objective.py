@@ -8,7 +8,7 @@ class Objective(object):
 
     def __init__(self, f, ndata, n, props={}):
         self.props = props
-        self.logger = logging.getLogger("objective")
+        self.logger = logging.getLogger("phf.objective")
         self.n = n
         self.ndata = ndata
         self.f = f

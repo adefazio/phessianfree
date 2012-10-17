@@ -48,8 +48,19 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
         
     :rtype: (xk, fval)
        
+    .. note::
+        If your objective is non-convex, you need to explictly provide a 
+        function that computes matrix vector products against the 
+        Gauss-Newton approximation to the hessian. You can do this
+        by making **f** an object with a __call__ method that implements the 
+        objective function as above, and a gaussNewtonProd(x, v, s, e) 
+        method that implements the matrix vector product against v for
+        the GN approximation at x over the datapoints (s,e). This is
+        illustrated in the autoencoder example code.
+        
+    
     """
-    logger = logging.getLogger("phessianfree")
+    logger = logging.getLogger("phf")
     useSubsetObjective = props.get("subsetObjective", True)
     n = len(x0)
     
@@ -64,6 +75,9 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
     
     (fval, gfk) = f(x0)
     gfkp1 = None
+    
+    if callback is not None:
+        callback(x0, fval, gfk, f.pointsProcessed)
     
     if isinf(fval):
         raise Exception("X0 fval is infinite")
@@ -105,7 +119,8 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
         gnorm = linalg.norm(gfkp1)
         gfk = gfkp1
         
-        logger.info("Iteration %d, fval: %1.7f, gnorm %1.3e", k, fval, gnorm) 
+        logger.info(" Iteration %d, fval: %1.2f, gnorm %1.3e, effective iters: %1.2f", 
+                    k, fval, gnorm, f.pointsProcessed/float(ndata)) 
         
         if callback is not None:
             callback(xk, fval, gfk, f.pointsProcessed)

@@ -5,6 +5,12 @@ import matplotlib
 import matplotlib.pyplot as plt
 
 def plot(methods):
+    """
+    Plots test objective and gradient norms for the passed optimization traces.
+    
+    :param list methods: PlottingCallback objects, containing the trace of 
+        optimization for the methods you want to plot against each other.
+    """
     linestyles = ['-', '--', ':', '-.', '-', '--', '-.', ':']
     colors = ['k', 'r', 'b', 'g', 'DarkOrange', 'm', 'y', 'c', 'Pink']
     captions = [m.mname for m in methods]
@@ -21,11 +27,11 @@ def plot(methods):
     axg.set_yscale('log')
     axg.set_ylabel('Gradient norm')
     axg.set_xlabel('Effective iterations')
-    axg.legend(captions, 'upper right')
     
     axl.set_ylabel('Training objective value')
     axl.set_xlabel('Effective iterations')
-    axg.legend(captions, 'upper right')
+    axl.legend(captions, 'upper right', prop={'size': 10})
+    
     plt.tight_layout()
     plt.show()
 
@@ -53,6 +59,8 @@ class PlottingWrapper(PlottingCallback):
     """ 
         This provides the same tracking of intermediate gradients and function 
         values as the PlottingCallback, but by wrapping the objective function.
+        Mainly of use for gathering convergence stats for plotting of scipy's
+        optimization functions.
     """
     
     def __init__(self, f, mname, ndata):
@@ -60,6 +68,9 @@ class PlottingWrapper(PlottingCallback):
         super(PlottingWrapper,self).__init__(mname, ndata)
         
     def __call__(self, x):
-        (fval, g) = f(x)
-        super(PlottingWrapper,self).__call__(x, fval, self.pp_total+ndata)
+        (fval, g) = self.f(x)
+        
+        # Skip storing line search iterations
+        if len(self.fvals) == 0 or self.fvals[-1] >= fval:
+            super(PlottingWrapper,self).__call__(x, fval, g, self.pp_total+self.ndata)
         return (fval, g)

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Example documentation &mdash; phessianfree 0.1 documentation</title>
+    <title>Optimization example overview &mdash; phessianfree 0.1 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -50,20 +50,54 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <span class="target" id="module-examples"></span><div class="section" id="example-documentation">
-<h1>Example documentation<a class="headerlink" href="#example-documentation" title="Permalink to this headline">¶</a></h1>
+  <span class="target" id="module-examples"></span><div class="section" id="optimization-example-overview">
+<h1>Optimization example overview<a class="headerlink" href="#optimization-example-overview" title="Permalink to this headline">¶</a></h1>
+<p>All examples run against the MNIST dataset. Source code is <a class="reference external" href="https://github.com/adefazio/phessianfree/tree/master/examples">here</a>.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="25%" />
 <col width="75%" />
 </colgroup>
 <thead valign="bottom">
-<tr class="row-odd"><th class="head" colspan="2">Objective Functions</th>
+<tr class="row-odd"><th class="head">Objective Functions</th>
+<th class="head">&nbsp;</th>
 </tr>
 </thead>
 <tbody valign="top">
 <tr class="row-even"><td>LogisticObjective</td>
 <td>Logistic Regression classifier objective function</td>
+</tr>
+<tr class="row-odd"><td>AutoencoderObjective</td>
+<td>Neural network autoencoder objective function</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="32%" />
+<col width="68%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Convergence examples</th>
+<th class="head">&nbsp;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>plot_logistic_regression</td>
+<td>Compares phessianfree against lbfgs for training a
+logistic regression model directly on the pixel
+values of the mnist dataset. This is a good
+example of how large the speedup can be for
+very smooth objectives, with moderate condition
+numbers.</td>
+</tr>
+<tr class="row-odd"><td>plot_autoencoder</td>
+<td>This illustrates the use of the Gauss-Newton
+approximation, together with Theano for a simple
+non-convex objective. Each iteration is much
+slower than the logistic regression example,
+so you might want to get cup of coffee while
+it&#8217;s running.</td>
 </tr>
 </tbody>
 </table>
