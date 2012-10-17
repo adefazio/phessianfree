@@ -30,13 +30,17 @@ rng = random.RandomState(123)
 
 # Initialize the parameters to random values, offsets to zero
 initial_W = asarray(rng.uniform(
-          low = -4.0 * sqrt(6.0 / (f.n_hidden + f.n_visible)),
-          high = 4.0 * sqrt(6.0 / (f.n_hidden + f.n_visible)),
+          low = -1.0 * sqrt(3.0 / (f.n_hidden + f.n_visible)),
+          high = 1.0 * sqrt(3.0 / (f.n_hidden + f.n_visible)),
           size=(f.n_visible, f.n_hidden)))
 bhid = zeros(f.n_hidden)
 bvis = zeros(f.n_visible)
 
 x0 = concatenate((bhid, bvis, initial_W.flatten()))
+
+##############################
+#Run a few iterations of lbfgs so that all methods converge to the same local-minimum
+x0, _, _ = scipy.optimize.fmin_l_bfgs_b(f, x0, m=3, maxfun=6)
 
 ##############################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
@@ -47,10 +51,12 @@ scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, copy(x0), m=20, maxfun=iters, iprint
 # Stores the intermediate values for later plotting
 phf_cb = convergence.PlottingCallback("phessianfree mb-lbfgs", ndata)
 
-props = { 
+props = {
     'subsetVariant': 'lbfgs',
-    'parts': 1200,
+    'parts': 1000,
+    'innerSolveAverage': True, # Should be used when parts is large
     'solveFraction': 0.2,
+    'gradRelErrorBound': 0.2
 }
 
 logger.info("Running phessianfree with inner lbfgs linear solver")
@@ -60,9 +66,11 @@ x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb,
 # Run with inner cg method as well
 props = { 
     'subsetVariant': 'cg',
-    'parts': 100,
+    'parts': 100,   # inner cg can not handle as many parts as inner lbfgs
     'solveFraction': 0.2,
+    'gradRelErrorBound': 0.2
 }
+
 phf_cb_cg = convergence.PlottingCallback("phessianfree cg", ndata)
 logger.info("Running phessianfree with conjugate gradient linear solver")
 x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb_cg, props=props)

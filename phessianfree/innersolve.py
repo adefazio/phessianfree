@@ -47,8 +47,11 @@ def lbfgs(f, xk, gfk, k, vecs, props):
     logger = logging.getLogger("phf.innersolve")
     solve_fraction = props.get("solveFraction", 0.2)
     stepFactor = props.get("innerSolveStepFactor", 0.5)
+    average = props.get("innerSolveAverage", False)
     n = len(xk)
     w = lbfgs_step(gfk, k, vecs, props)
+    wsum = zeros(n)
+    wsum_count = 0
     gnorm = linalg.norm(gfk)
     
     # Each iteration requires two evaluations, so we half the max iters here
@@ -88,12 +91,22 @@ def lbfgs(f, xk, gfk, k, vecs, props):
         
         if cosdirection < 0: 
             w = wp
-            logger.debug("w: %s", w[0:min(5, n)])
+            
+            if i == 0 or i % (maxiter / 10) == 0:
+                logger.debug("w: %s", w[0:min(5, n)])
         else:
             logger.debug("Skipping w update to ensure w is a descent direction")
         wnorm = linalg.norm(w)
-        
-    return w
+
+        if i > maxiter/2:
+            wsum += w
+            wsum_count += 1
+
+    if average:
+        wavg = wsum / wsum_count 
+        return wavg
+    else:
+        return w
         
 
 def lbfgs_step(gfk, k, vecs, props):

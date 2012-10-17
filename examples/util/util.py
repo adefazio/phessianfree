@@ -7,6 +7,7 @@ import scipy.io
 import matplotlib
 import matplotlib.pyplot as plt
 import mnist
+import os, struct
 
 def permute_data(X, d):
     perm = range(X.shape[0])
@@ -29,7 +30,8 @@ def read_mnist(partial=False):
         
     # read training data
     logger.info("Reading training data ...")
-    images, labels = mnist.read(digits1 + digits2, dataset = "training", path = "examples/data")
+    images, labels = mnist.read(digits1 + digits2, dataset = "training", 
+                                path = os.path.join("examples", "data"))
     logger.info("done.")
 
     def extract(images, labels):
@@ -50,7 +52,8 @@ def read_mnist(partial=False):
     (X,d) = extract(images, labels)
 
     logger.info("Reading test data ...")
-    timages, tlabels = mnist.read(digits1 + digits2, dataset = "testing", path = "examples/data")
+    timages, tlabels = mnist.read(digits1 + digits2, dataset = "testing", 
+                                  path = os.path.join("examples", "data"))
     (Xt,dt) = extract(timages, tlabels)
     logger.info("done.")
     

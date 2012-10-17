@@ -18,7 +18,10 @@ def weak_wolfe(f, xk, upper_val, grad, pk, props):
     bracket_right = inf
         
     def phi(alpha):
-        return f(xk + alpha*pk)
+        if hasattr(f, 'onCurrentSubset'):
+            return f.onCurrentSubset(xk + alpha*pk)
+        else:
+            return f(xk + alpha*pk)
 
     
     directional_derivative = dot(pk, grad)
@@ -89,5 +92,8 @@ def weak_wolfe(f, xk, upper_val, grad, pk, props):
    
         logger.info("   LS %d %s: trying t = %1.4e (from bracket: [%1.1e, %1.1e])",
                     i, interpMethod, t, bracket_left, bracket_right)
+           
+    if hasattr(f, 'onCurrentSubset'):
+        (cval, cgrad) = f(xk + t*pk, expand=True)
            
     return (t, cval, cgrad)

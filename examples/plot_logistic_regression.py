@@ -27,11 +27,10 @@ phf_cb = convergence.PlottingCallback("phessianfree", ndata)
 
 props = { 
     'subsetVariant': 'lbfgs',
-    'parts': 100,
-    'solveFraction': 0.2,
+    'gradRelErrorBound': 0.4 # Default is a more conservative 0.1
 }
 
-x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=15, callback=phf_cb, props=props)
+x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=20, callback=phf_cb, props=props)
 
 ##########################################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
