@@ -7,8 +7,8 @@ import phessianfree
 from phessianfree import convergence
 import scipy.optimize
 
-n_hidden = 10
-iters = 15
+n_hidden = 20
+iters = 18
 
 set_printoptions(precision=4, linewidth=150)
 logging.basicConfig(level="DEBUG")
@@ -69,6 +69,6 @@ props = {
 
 phf_cb_cg = convergence.PlottingCallback("phessianfree cg", ndata)
 logger.info("Running phessianfree with conjugate gradient linear solver")
-x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb_cg, props=props)
+#x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb_cg, props=props)
 
-convergence.plot([lbfgs_wrapper, phf_cb, phf_cb_cg])
+convergence.plot([lbfgs_wrapper, phf_cb])
