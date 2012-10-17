@@ -41,4 +41,3 @@ scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, x0, m=15, maxfun=20, iprint=0)
 #########################################
 convergence.plot([lbfgs_wrapper, phf_cb])
 
-
