@@ -93,7 +93,108 @@ not count line search iterations.</li>
 useful for tracking progress for latter plotting. 
 PlottingCallback in the convergence module can do
 this for you.</li>
-<li><strong>props</strong> (<em>object</em>) &#8211; Map of additional parameters.</li>
+<li><strong>props</strong> (<em>object</em>) &#8211; <dl class="docutils">
+<dt>Map of additional parameters:</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt><strong>parts</strong> (<em>integer</em> default 100)</dt>
+<dd>For computing gradients and hessian vector products,
+the data is split into this many parts. Calls to your
+objective function will be in roughly ndata/parts.
+The default of 100 is suitable for most datasets, 
+smaller numbers are only useful if the dataset is small
+or non-homogeneous, in which case the hessian free method
+is ineffective. Larger numbers of parts may improve 
+convergence, but result proportionally more internal overhead.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>subsetVariant</strong> (<em>string</em> default &#8216;lbfgs&#8217;)</dt>
+<dd>Setting this to &#8216;cg&#8217; gives the standard conjugate gradient method
+for solving the linear system Hp = -g, to find the search direction
+p from the gradient g and hessian H. This is computed over only one
+of the parts, so only a small amount of the data is seen.
+Setting this to &#8216;lbfgs&#8217; uses a stochastic minibatch lbfgs method
+for solving the linear subproblem. This sees many more parts of the
+data, but is only able to make half as many steps for the same 
+computation time. For problems without extreme curvature, lbfgs
+works much better than cg. If the condition number of the hessian
+is very large however, cg is the better option. In those cases
+the solveFraction property should normally be increases as well.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>solveFraction</strong> (<em>float</em> default 0.2)</dt>
+<dd>The cg or lbfgs linear solvers perform a number of iterations
+such that <strong>solveFraction</strong> fraction of overhead is incurred.
+For example, if set to 0.2 and 100 parts, 20 cg iterations on 1
+part will be preformed, if the cg subset variant is used.
+If subsetObjective is off, then essentially 20% extra computation
+is done per outer step over a standard lbfgs method (excluding line
+searches).</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>subsetObjective</strong> (<em>boolean</em> default True) </dt>
+<dd>Turn on or off the use of subsets of data for 
+computing gradients. If off, gradients are computed using 
+the full dataset, but hessian-vector products still use subsets.
+The size of the subset used for computing the gradient is adaptive
+using bounds on the approximation error.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>gradRelErrorBound</strong> (<em>float</em> default 0.1)</dt>
+<dd>At a search point, the gradient is computed over enough parts
+so that the relative variance of the gradients is brought below
+this threshold. 0.1 is conservative; better results may be 
+achieved by using values up to about 0.4. Larger values may cause
+erratic convergence behavior though.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>lbfgsMemory</strong> (<em>integer</em> 10)</dt>
+<dd>The lbfgs search direction is used as the initial guess at the 
+search direction for the cg and lbfgs inner solves. This controls
+the memory used for that. The same memory is used for the inner 
+lbfgs solve. Changing this has less of an effect than it would
+on a standard lbfgs implementation.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>fdEps</strong> (<em>float</em> default 1e-8)</dt>
+<dd>Unless a gaussNewtonProd method is implemented, hessian vector
+products are computed by using finite differences. Unlike 
+applying finite differences to approximate the gradient, the FD
+method allows for the computation of hessian-vector products
+at the cost of only one subset gradient evaluation.
+If convergence plots become erratic near the optimum, tuning this
+parameter can help. This normally occurs long after the test loss
+has plateaued however.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>innerSolveAverage</strong> (<em>boolean</em> default False)</dt>
+<dd>Applicable only if subsetVariant is lbfgs, this turns on the 
+use of 50% sequence suffix averaging for the inner solve.
+If a large number of parts (say 1000) is being used, this
+can give better results.</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><strong>innerSolveStepFactor</strong> (<em>float</em> default 0.5)</dt>
+<dd>The lbfgs subsetVariant is stochastic, however it uses the 
+fact that quadratic problems have a simple formula for exact line
+searches, in order to make better step choices than simple SGD.
+Doing an exact line search makes overconfident steps however, and
+so the step is scaled by this factor. If the lbfgs linear solve
+is diverging, decrease this.</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </td>
 </tr>

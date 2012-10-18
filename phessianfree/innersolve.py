@@ -78,7 +78,9 @@ def lbfgs(f, xk, gfk, k, vecs, props):
         kmax = max_key(vecs)
         if pkHpk < 0:
             raise Exception("Hessian is not positive semi-definite. " + 
-                            "Try using the Gauss-Newton approximation to the hessian")
+                            "Try using the Gauss-Newton approximation to the hessian." + 
+                            "If your problem is convex, your gradient " +       
+                            "calculation may just be wrong")
         else:
             vecs[kmax] = (pk, Hpk, 1.0 / numpy.dot(pk,Hpk))
             kmax = kmax + 1

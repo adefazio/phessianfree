@@ -35,7 +35,7 @@ x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=20, callback=phf_cb, pr
 ##########################################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
 logger.info("Running scipy's lbfgs implementation")
-scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, x0, m=15, maxfun=20, iprint=0)
+scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, x0, m=15, maxfun=20, disp=5)
 
 #########################################
 convergence.plot([lbfgs_wrapper, phf_cb])

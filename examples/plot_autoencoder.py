@@ -7,8 +7,8 @@ import phessianfree
 from phessianfree import convergence
 import scipy.optimize
 
-n_hidden = 20
-iters = 18
+n_hidden = 40
+iters = 30
 
 set_printoptions(precision=4, linewidth=150)
 logging.basicConfig(level="DEBUG")
@@ -24,8 +24,7 @@ X, d = permute_data(X,d) # Randomize order
 f = AutoencoderObjective(X, reg=0.0001, n_hidden=n_hidden)
 m = f.n_total_weights
 
-# Initialization is quite cruical for autoencoders
-# Randon number stuff
+#################################
 rng = random.RandomState(123)
 
 # Initialize the parameters to random values, offsets to zero
@@ -41,11 +40,11 @@ x0 = concatenate((bhid, bvis, initial_W.flatten()))
 ##############################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
 logger.info("Running scipy's lbfgs implementation")
-scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, copy(x0), m=20, maxfun=iters, iprint=0)
+scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, copy(x0), m=20, maxfun=iters, disp=5)
 
 ##############################
 # Stores the intermediate values for later plotting
-phf_cb = convergence.PlottingCallback("phessianfree mb-lbfgs", ndata)
+phf_cb = convergence.PlottingCallback("phessianfree", ndata)
 
 props = {
     'subsetVariant': 'lbfgs',

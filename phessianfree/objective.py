@@ -115,6 +115,7 @@ class SubsetObjective(Objective):
             the correct values at the current points for parts under currentSubsetParts
         """
         loss = 0.0
+        standardErr = 0.0
         g = zeros(self.n)
         for p in range(self.parts):
             if expand and p < self.currentSubsetParts:
@@ -155,9 +156,8 @@ class SubsetObjective(Objective):
         self.currentSubsetParts = p + 1
         scale = self.ndata/float(self.partRange(p)[1])
                 
-        if self.currentSubsetParts != self.parts:
-            self.logger.debug("For objective eval used %d/%d of data (se: %1.2f)",
-                self.currentSubsetParts, self.parts, standardErr)
+        self.logger.debug("For objective eval used %d/%d of data (se: %1.2f)",
+            self.currentSubsetParts, self.parts, standardErr)
                 
         return (loss*scale, g*scale)
 
