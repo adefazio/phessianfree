@@ -8,3 +8,4 @@ pnewton package documentation
 """
 
 from optimize import optimize
+from sgd import sgd

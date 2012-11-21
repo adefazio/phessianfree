@@ -154,7 +154,7 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
     xk = x0
 
     gnorm = linalg.norm(gfk)
-    logger.info("Initial gnorm %2.2e", gnorm) 
+    logger.info("Initial fval: %1.8f, gnorm %2.2e", fval, gnorm)
 
     vecs = {}
     
@@ -163,7 +163,7 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
         pk = innersolve.solve(f, xk, gfk, k, vecs, props)
         
         ###### Line search
-        (alpha_k, fval, gfkp1) = linesearch.weak_wolfe(f, xk, fval, gfk, pk, props)
+        (alpha_k, fval, gfkp1) = linesearch.strong_wolfe(f, xk, fval, gfk, pk, props)
             
         previous_fval = fval
         xkp1 = xk + alpha_k * pk
@@ -187,7 +187,7 @@ def optimize(f, x0, ndata, gtol=1e-5, maxiter=100, callback=None, props={}):
         gnorm = linalg.norm(gfkp1)
         gfk = gfkp1
         
-        logger.info(" Iteration %d, fval: %1.2f, gnorm %1.3e, effective iters: %1.2f", 
+        logger.info(" Iteration %d, fval: %1.8f, gnorm %1.3e, effective iters: %1.2f", 
                     k, fval, gnorm, f.pointsProcessed/float(ndata)) 
         
         if callback is not None:

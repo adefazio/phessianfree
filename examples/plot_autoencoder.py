@@ -40,7 +40,7 @@ x0 = concatenate((bhid, bvis, initial_W.flatten()))
 ##############################
 lbfgs_wrapper = convergence.PlottingWrapper(f, "lbfgs", ndata)
 logger.info("Running scipy's lbfgs implementation")
-scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, copy(x0), m=20, maxfun=iters, disp=5)
+scipy.optimize.fmin_l_bfgs_b(lbfgs_wrapper, copy(x0), m=30, maxfun=iters, disp=5)
 
 ##############################
 # Stores the intermediate values for later plotting
@@ -55,7 +55,7 @@ props = {
 }
 
 logger.info("Running phessianfree with inner lbfgs linear solver")
-x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb, props=props)
+x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=20, callback=phf_cb, props=props)
 
 ##############################
 # Run with inner cg method as well
@@ -70,4 +70,10 @@ phf_cb_cg = convergence.PlottingCallback("phessianfree cg", ndata)
 logger.info("Running phessianfree with conjugate gradient linear solver")
 #x, optinfo = phessianfree.optimize(f, x0, ndata, maxiter=iters, callback=phf_cb_cg, props=props)
 
-convergence.plot([lbfgs_wrapper, phf_cb])
+
+phf_sgd = convergence.PlottingCallback("SGD", ndata)
+x = phessianfree.sgd(f, x0, ndata, maxiter=30, callback=phf_sgd, 
+    props={'SGDInitialStep': 30.0, 'SGDStepScale': 0.1})
+    
+
+convergence.plot([lbfgs_wrapper, phf_cb, phf_sgd], [119, 160])

@@ -18,6 +18,7 @@ class Objective(object):
         # if ndata is not exactly divisble        
         self.parts = props.get('parts', 100)
         self.psize = int(ceil(ndata / float(self.parts)))
+        self.logger.info("Part size %d chosen for m-v products", self.psize)
         # Number of parts is adjusted downwards if necessary for even partitioning
         self.parts = int(floor(ndata / float(self.psize)))
         
@@ -53,6 +54,10 @@ class Objective(object):
             loss += lossp
             g += gp
         return (loss, g)
+
+    def evalRandom(self, x):
+        p = random.randint(0, self.parts)
+        return self.evalPart(x, p)
 
     def make_mv_rand(self, x):
         p = random.randint(0, self.parts)

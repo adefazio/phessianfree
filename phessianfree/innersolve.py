@@ -94,7 +94,7 @@ def lbfgs(f, xk, gfk, k, vecs, props):
         if cosdirection < 0: 
             w = wp
             
-            if i == 0 or i % (maxiter / 10) == 0:
+            if i == 0 or (i % max(1,maxiter / 10) == 0):
                 logger.debug("w: %s", w[0:min(5, n)])
         else:
             logger.debug("Skipping w update to ensure w is a descent direction")

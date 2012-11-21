@@ -4,7 +4,7 @@ from numpy import *
 import matplotlib
 import matplotlib.pyplot as plt
 
-def plot(methods):
+def plot(methods, objRange=None):
     """
     Plots test objective and gradient norms for the passed optimization traces.
     
@@ -31,6 +31,9 @@ def plot(methods):
     axl.set_ylabel('Training objective value')
     axl.set_xlabel('Effective iterations')
     axl.legend(captions, 'upper right', prop={'size': 10})
+    
+    if objRange is not None:
+        axl.set_ylim(objRange)
     
     plt.tight_layout()
     plt.show()
